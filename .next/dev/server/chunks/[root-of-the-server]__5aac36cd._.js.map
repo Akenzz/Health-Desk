@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///home/akenzz/Projects/college%20project/Health-Desk/src/app/api/logout/route.js"],"sourcesContent":["import { NextResponse } from \"next/server\";\n\nexport async function POST() {\n  const response = NextResponse.json({ success: true, message: \"Logged out\" });\n\n  response.cookies.set(\"token\", \"\", { maxAge: 0, path: \"/\" });\n  response.cookies.set(\"userName\", \"\", { maxAge: 0, path: \"/\" });\n  response.cookies.set(\"email\", \"\", { maxAge: 0, path: \"/\" });\n  response.cookies.set(\"phone\", \"\", { maxAge: 0, path: \"/\" });\n  response.cookies.set(\"role\", \"\", { maxAge: 0, path: \"/\" });\n\n  return response;\n}\n"],"names":[],"mappings":";;;;AAAA;;AAEO,eAAe;IACpB,MAAM,WAAW,gJAAY,CAAC,IAAI,CAAC;QAAE,SAAS;QAAM,SAAS;IAAa;IAE1E,SAAS,OAAO,CAAC,GAAG,CAAC,SAAS,IAAI;QAAE,QAAQ;QAAG,MAAM;IAAI;IACzD,SAAS,OAAO,CAAC,GAAG,CAAC,YAAY,IAAI;QAAE,QAAQ;QAAG,MAAM;IAAI;IAC5D,SAAS,OAAO,CAAC,GAAG,CAAC,SAAS,IAAI;QAAE,QAAQ;QAAG,MAAM;IAAI;IACzD,SAAS,OAAO,CAAC,GAAG,CAAC,SAAS,IAAI;QAAE,QAAQ;QAAG,MAAM;IAAI;IACzD,SAAS,OAAO,CAAC,GAAG,CAAC,QAAQ,IAAI;QAAE,QAAQ;QAAG,MAAM;IAAI;IAExD,OAAO;AACT"}}]
-}
