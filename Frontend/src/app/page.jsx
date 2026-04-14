@@ -253,9 +253,9 @@ export default async function HomePage() {
                 "HealthDesk made my consultation seamless and stress-free. The AI reports were spot on, and I felt heard every step of the way."
               </p>
               <div className="flex items-center justify-center pt-4 border-t border-blue-100">
-                <img src="https://i.pravatar.cc/150?u=1" alt="Kartik NHM" className="w-14 h-14 rounded-full mr-4 border-2 border-cyan-300" />
+                <img src="https://i.pravatar.cc/150?u=1" alt="Lisa Su" className="w-14 h-14 rounded-full mr-4 border-2 border-cyan-300" />
                 <div>
-                  <div className="font-bold text-slate-900">Kartik NHM</div>
+                  <div className="font-bold text-slate-900">Lisa Su</div>
                   <div className="text-sm text-slate-500">Patient</div>
                 </div>
               </div>
@@ -273,9 +273,9 @@ export default async function HomePage() {
                 "As a busy professional, the asynchronous video feature is a game-changer. Quick, reliable, and incredibly user-friendly."
               </p>
               <div className="flex items-center justify-center pt-4 border-t border-blue-100">
-                <img src="https://i.pravatar.cc/150?u=2" alt="Aviral Tripathi" className="w-14 h-14 rounded-full mr-4 border-2 border-cyan-300" />
+                <img src="https://i.pravatar.cc/150?u=2" alt="Sam Altman" className="w-14 h-14 rounded-full mr-4 border-2 border-cyan-300" />
                 <div>
-                  <div className="font-bold text-slate-900">Aviral Tripathi</div>
+                  <div className="font-bold text-slate-900">Sam Altman</div>
                   <div className="text-sm text-slate-500">Doctor</div>
                 </div>
               </div>
@@ -293,9 +293,9 @@ export default async function HomePage() {
                 "The multilingual chatbot and symptom analyzer saved me hours. HealthDesk truly understands diverse needs."
               </p>
               <div className="flex items-center justify-center pt-4 border-t border-blue-100">
-                <img src="https://i.pravatar.cc/150?u=3" alt="Amogh Kini" className="w-14 h-14 rounded-full mr-4 border-2 border-cyan-300" />
+                <img src="https://i.pravatar.cc/150?u=3" alt="Priya Sharma" className="w-14 h-14 rounded-full mr-4 border-2 border-cyan-300" />
                 <div>
-                  <div className="font-bold text-slate-900">Amogh Kini</div>
+                  <div className="font-bold text-slate-900">Priya Sharma</div>
                   <div className="text-sm text-slate-500">Patient Advocate</div>
                 </div>
               </div>
