@@ -135,7 +135,10 @@ router.get('/send/email', async (req, res) => {
     );
 
     const sent = await sendOtpEmail(String(email).toLowerCase().trim(), otp);
-    return res.json({ valid: Boolean(sent.ok) });
+    return res.json({
+      valid: Boolean(sent.ok),
+      message: sent.ok ? 'OTP sent successfully' : (sent.error?.message || 'Failed to send OTP'),
+    });
   } catch (error) {
     console.error('send/email failed:', error);
     return res.status(500).json({ valid: false });

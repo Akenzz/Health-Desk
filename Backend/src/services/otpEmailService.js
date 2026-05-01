@@ -18,8 +18,8 @@ async function sendOtpEmail(email, otp) {
   `;
 
   if (!resend) {
-    console.log(`[DEV OTP] ${email} -> ${otp}`);
-    return { ok: true, skipped: true };
+    console.warn('RESEND_API_KEY is missing; OTP email was not sent.');
+    return { ok: false, error: new Error('Email service is not configured') };
   }
 
   try {

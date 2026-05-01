@@ -7,8 +7,8 @@ import { User, Mail, Phone, Lock, Loader2, AlertCircle, Heart, Calendar, Droplet
 const VALIDATION_RULES = {
     username: {
         minLength: 5,
-        pattern: /^[a-zA-Z0-9]+$/,
-        message: "Username must be at least 5 characters long and contain only letters and numbers."
+        pattern: /^[a-zA-Z0-9][a-zA-Z0-9\s'-]*$/,
+        message: "Name must be at least 5 characters long and contain only letters, numbers, spaces, apostrophes, or hyphens."
     },
     password: {
         minLength: 7,
@@ -54,11 +54,13 @@ export default function SignupPage() {
         const rule = VALIDATION_RULES[name];
         if (!rule) return '';
 
-        if (rule.minLength && value.length < rule.minLength) {
+        const normalizedValue = typeof value === 'string' ? value.trim() : value;
+
+        if (rule.minLength && normalizedValue.length < rule.minLength) {
             return rule.message;
         }
 
-        if (rule.pattern && !rule.pattern.test(value)) {
+        if (rule.pattern && !rule.pattern.test(normalizedValue)) {
             return rule.message;
         }
 
@@ -345,7 +347,7 @@ export default function SignupPage() {
 
                         <form onSubmit={handleSignupSubmit} className="space-y-5">
                             <div className="space-y-2">
-                                <label htmlFor="username" className="block text-sm font-semibold text-gray-700">Username</label>
+                                <label htmlFor="username" className="block text-sm font-semibold text-gray-700">Full Name</label>
                                 <div className="relative group">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                         <User className={`transition-colors duration-200 ${errors.username ? 'text-red-500' : 'text-gray-400 group-focus-within:text-cyan-500'}`} size={20} />
@@ -354,7 +356,7 @@ export default function SignupPage() {
                                         type="text"
                                         id="username"
                                         name="username"
-                                        placeholder="Choose a username"
+                                        placeholder="Enter your full name"
                                         value={formData.username}
                                         onChange={handleInputChange}
                                         className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-2xl focus:ring-4 transition-all duration-200 font-medium bg-white text-gray-800 placeholder:text-gray-400 ${errors.username

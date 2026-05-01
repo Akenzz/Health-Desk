@@ -39,8 +39,10 @@ export async function GET(request) {
     }
 
     return NextResponse.json({
-      success: data.valid || true,
-      message: 'OTP sent successfully'
+      success: Boolean(data.valid),
+      message: data.valid ? 'OTP sent successfully' : (data.message || 'Failed to send OTP')
+    }, {
+      status: data.valid ? 200 : 502
     });
 
   } catch (error) {
