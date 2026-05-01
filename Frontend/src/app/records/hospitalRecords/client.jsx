@@ -294,9 +294,9 @@ export default function HospitalRecordsClient({
                                             </div>
 
                                             <div className="space-y-3">
-                                                {docs.map((doc) => (
+                                                {docs.map((doc, idx) => (
                                                     <div
-                                                        key={doc.id}
+                                                        key={doc._id ?? doc.id ?? doc.fileUrl ?? `${date}-${idx}`}
                                                         onClick={() => openPDF(doc)}
                                                         className="bg-white rounded-xl p-4 border border-slate-200 cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:border-cyan-300 group"
                                                     >

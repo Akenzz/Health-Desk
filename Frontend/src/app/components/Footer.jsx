@@ -3,8 +3,8 @@ import { ArrowUp } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer style={{ marginTop: '100px' }}>
-      <div className="flex items-center justify-center gap-4 p-4 bg-white text-gray-700">
+    <footer className="mt-auto w-full">
+      <div className="flex items-center justify-center gap-4 border-t border-cyan-100 bg-white/90 p-4 text-gray-700 backdrop-blur">
         <p>&copy; 2025 HealthDesk. All rights reserved.</p>
         <a
           href="#"
