@@ -21,7 +21,7 @@ async function callGemini(prompt) {
     throw new Error('GENAI_API_KEY is missing');
   }
 
-  const model = env.GENAI_MODEL || 'gemini-2.0-flash';
+  const model = env.GENAI_MODEL || 'gemini-2.5-flash';
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GENAI_API_KEY}`;
 
   const response = await fetch(endpoint, {

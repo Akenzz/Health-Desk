@@ -11,7 +11,7 @@ const env = {
   RESEND_API_KEY: process.env.RESEND_API_KEY || '',
   RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
   GENAI_API_KEY: process.env.GENAI_API_KEY || '',
-  GENAI_MODEL: process.env.GENAI_MODEL || 'gemini-2.0-flash',
+  GENAI_MODEL: process.env.GENAI_MODEL || 'gemini-2.5-flash',
   ASSEMBLYAI_API_KEY: process.env.ASSEMBLYAI_API_KEY || '',
   ASSEMBLYAI_BASE_URL: process.env.ASSEMBLYAI_BASE_URL || 'https://api.assemblyai.com/v2',
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',

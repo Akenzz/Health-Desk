@@ -69,65 +69,6 @@ export default function VideoCall() {
         };
     }, []);
 
-    const convertToWav = async (audioBlob) => {
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const arrayBuffer = await audioBlob.arrayBuffer();
-            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
-            const wavBlob = audioBufferToWav(audioBuffer);
-            return wavBlob;
-        } catch (error) {
-            return audioBlob;
-        }
-    };
-
-    const audioBufferToWav = (audioBuffer) => {
-        const numberOfChannels = audioBuffer.numberOfChannels;
-        const sampleRate = audioBuffer.sampleRate;
-        const format = 1; // PCM
-        const bitDepth = 16;
-
-        const bytesPerSample = bitDepth / 8;
-        const blockAlign = numberOfChannels * bytesPerSample;
-
-        const buffer = audioBuffer.getChannelData(0);
-        const length = buffer.length;
-        const arrayBuffer = new ArrayBuffer(44 + length * bytesPerSample);
-        const view = new DataView(arrayBuffer);
-
-        // WAV header
-        const writeString = (offset, string) => {
-            for (let i = 0; i < string.length; i++) {
-                view.setUint8(offset + i, string.charCodeAt(i));
-            }
-        };
-
-        writeString(0, 'RIFF');
-        view.setUint32(4, 36 + length * bytesPerSample, true);
-        writeString(8, 'WAVE');
-        writeString(12, 'fmt ');
-        view.setUint32(16, 16, true);
-        view.setUint16(20, format, true);
-        view.setUint16(22, numberOfChannels, true);
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, sampleRate * blockAlign, true);
-        view.setUint16(32, blockAlign, true);
-        view.setUint16(34, bitDepth, true);
-        writeString(36, 'data');
-        view.setUint32(40, length * bytesPerSample, true);
-
-        let offset = 44;
-        for (let i = 0; i < length; i++) {
-            const sample = Math.max(-1, Math.min(1, buffer[i]));
-            const intSample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
-            view.setInt16(offset, intSample, true);
-            offset += 2;
-        }
-
-        return new Blob([arrayBuffer], { type: 'audio/wav' });
-    };
-
     const uploadAudioToBackend = async (audioBlob) => {
         if (!token || !email || !phoneNumber || !meetingId) {
             return false;
@@ -313,8 +254,7 @@ export default function VideoCall() {
                 const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
 
                 setTranscriptionStatus('transcripting');
-                const convertedBlob = await convertToWav(audioBlob);
-                const success = await uploadAudioToBackend(convertedBlob);
+                const success = await uploadAudioToBackend(audioBlob);
 
                 if (success) {
                     setTranscriptionStatus('successful');
@@ -352,7 +292,7 @@ export default function VideoCall() {
     useEffect(() => {
         const initJitsi = () => {
             const displayName = name || 'Unknown';
-            const roomName = localStorage.getItem('meetingId') || meetingId || 'Medimitra';
+            const roomName = localStorage.getItem('meetingId') || meetingId || 'healthdesk-default-room';
 
             if (window.JitsiMeetExternalAPI && jitsiContainer.current) {
                 const api = new window.JitsiMeetExternalAPI(JITSI_DOMAIN, {
@@ -462,66 +402,72 @@ export default function VideoCall() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            <div
-                ref={jitsiContainer}
-                className="flex-1 w-full h-full bg-black rounded-lg overflow-hidden shadow-2xl"
-            />
+            <div className="relative flex-1">
+                <div
+                    ref={jitsiContainer}
+                    className="flex-1 w-full h-full bg-black rounded-lg overflow-hidden shadow-2xl"
+                />
 
-            {userRole === 'doctor' && (
-                <div className="bg-white border-t-4 border-[#40E0D0] p-4 shadow-lg">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="flex items-center justify-center gap-4 flex-wrap">
-                            {recording && (
-                                <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                                    <span className="text-red-700 font-medium text-sm">Recording...</span>
+                {userRole === 'doctor' && (
+                    <div className="absolute top-4 right-4 z-50">
+                        <div className="bg-white/95 backdrop-blur border border-slate-200 rounded-lg p-3 shadow-lg">
+                            <div className="flex items-center gap-3">
+                                <div className="flex flex-col items-end gap-2">
+                                    {recording && (
+                                        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                                            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                                            <span className="text-red-700 font-medium text-sm">Recording</span>
+                                        </div>
+                                    )}
+
+                                    {isProcessing && (
+                                        <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                                            <Loader2 className="animate-spin text-blue-500" size={16} />
+                                            <span className="text-blue-700 font-medium text-sm">Processing</span>
+                                        </div>
+                                    )}
+
+                                    {transcriptionStatus === 'transcripting' && (
+                                        <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
+                                            <Loader2 className="animate-spin text-yellow-500" size={16} />
+                                            <span className="text-yellow-700 font-medium text-sm">Transcripting</span>
+                                        </div>
+                                    )}
+
+                                    {transcriptionStatus === 'successful' && (
+                                        <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                                            <div className="w-3 h-3 bg-green-500 rounded-full" />
+                                            <span className="text-green-700 font-medium text-sm">Successful</span>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
 
-                            {isProcessing && (
-                                <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-                                    <Loader2 className="animate-spin text-blue-500" size={16} />
-                                    <span className="text-blue-700 font-medium text-sm">Processing...</span>
+                                <div>
+                                    {!recording && !isProcessing && transcriptionStatus === '' && (
+                                        <button
+                                            onClick={startRecording}
+                                            className="bg-[#40E0D0] hover:bg-[#36C7B8] text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-lg hover:shadow-xl"
+                                        >
+                                            <Mic size={16} />
+                                            Start
+                                        </button>
+                                    )}
+
+                                    {recording && (
+                                        <button
+                                            onClick={stopRecording}
+                                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-lg hover:shadow-xl"
+                                        >
+                                            <Square size={16} />
+                                            Stop
+                                        </button>
+                                    )}
                                 </div>
-                            )}
-
-                            {transcriptionStatus === 'transcripting' && (
-                                <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
-                                    <Loader2 className="animate-spin text-yellow-500" size={16} />
-                                    <span className="text-yellow-700 font-medium text-sm">Transcripting...</span>
-                                </div>
-                            )}
-
-                            {transcriptionStatus === 'successful' && (
-                                <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                                    <span className="text-green-700 font-medium text-sm">Successful</span>
-                                </div>
-                            )}
-
-                            {!recording && !isProcessing && transcriptionStatus === '' && (
-                                <button
-                                    onClick={startRecording}
-                                    className="bg-[#40E0D0] hover:bg-[#36C7B8] text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-lg hover:shadow-xl"
-                                >
-                                    <Mic size={16} />
-                                    Start Recording
-                                </button>
-                            )}
-
-                            {recording && (
-                                <button
-                                    onClick={stopRecording}
-                                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-lg hover:shadow-xl"
-                                >
-                                    <Square size={16} />
-                                    Stop Recording
-                                </button>
-                            )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

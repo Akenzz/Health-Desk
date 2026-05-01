@@ -42,7 +42,7 @@ export default function ThankYou() {
             window.close();
 
             setTimeout(() => {
-                alert('You can close this tab. Thank you for using MediMitra!');
+                alert('You can close this tab. Thank you for using Health Desk!');
             }, 500);
         }
     }, [countdown, router]);
@@ -51,7 +51,7 @@ export default function ThankYou() {
         window.close();
 
         setTimeout(() => {
-            alert('You can close this tab. Thank you for using MediMitra!');
+            alert('You can close this tab. Thank you for using Health Desk!');
         }, 500);
     };
 
@@ -70,7 +70,7 @@ export default function ThankYou() {
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2">
                         Thank you for using
                         <span className="text-[#40E0D0] mt-2 flex items-center justify-center gap-2">
-                            MediMitra
+                            Health Desk
                             <Heart size={32} className="text-red-500 animate-pulse" />
                         </span>
                     </h1>
