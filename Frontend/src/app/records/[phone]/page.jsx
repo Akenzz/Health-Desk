@@ -52,7 +52,7 @@ async function fetchPatientData(phoneNumber, token) {
             const processedVisits = conversationData.symptomps.map((_, index) => {
                 return {
                     id: index + 1,
-                    date: "2025-12-30",
+                    date: "2026-1-3",
                     symptoms: conversationData.symptomps?.[index] || [],
                     diagnosis: conversationData.diagnosis?.[index]?.[0] || "No diagnosis",
                     diagnosisList: conversationData.diagnosis?.[index] || [],
